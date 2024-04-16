@@ -20,7 +20,7 @@ class Adventure:
 
             if result == "positive" and loot == False:
                 player.get_score(50)
-                return "The zombie tried to bite you but you defeated it first!"
+                return "A zombie tried to bite you but you defeated it first!"
             
             elif result == "positive" and loot == True:
                 player.get_score(100)
@@ -30,14 +30,14 @@ class Adventure:
                         while item_found == "Pet Rock":
                             item_found = random.choice(list(items.Item.items.keys()))
 
-                message="You successfuly snuck up on the zombie!\nYou found a "+item_found +" on it!"
+                message="You successfuly snuck up on a zombie!\nYou found a "+item_found +" on it!"
                 lootmessage = player.find_regular_item(item_found)
                 return message + lootmessage
             
             elif result == "negative":
                 player.get_hp(-20)
                 player.get_sp(-2)  
-                return "You tried to sneak up on the zombie unsuccesfully and it bit you!"
+                return "You tried to sneak up on a zombie unsuccesfully and it bit you!"
         
         elif event_type == "rock": #Rock Event
 
