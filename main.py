@@ -2,17 +2,13 @@ import pygame
 pygame.init()
 pygame.display.set_caption("Zurvive")
 
-import random,sys, player, items, main, events, graphics
+import player, events, graphics, button, terminalscreen, inventoryscreen
 
 screen = pygame.display.set_mode((1600, 800))
 font = pygame.font.Font("TurretRoad-Regular.ttf", 32)
 black = (0, 0, 0)
 white = (255, 255, 255)
 green = (25, 149, 21)
-
-
-
-
 
 
 def game():
@@ -25,22 +21,19 @@ def game():
         the_player = player.Player()  
         the_adventure = events.Adventure()  
         gameover = False
-        message = "Welcome to Zurvive! Press W to Explore!\nPress i for Inventory"
         inventory_displayed = False
         event = None
         event_pending = False
         gameover_base = "You have succumbed to your {}! Game Over!\nYour score: {}\nPress R to restart or Q to quit!"
-
+        message = "Welcome to Zurvive! Press W to Explore!\nPress i for Inventory"
+        inventory_button = button.Button(green, 100, 100, 150, 50, font, 'Click Me!')
         
 
         while not gameover:
 
             screen.fill((0, 0, 0)) 
-
-            graphics.draw_rectangle(screen, (25, 149, 21), (10, 10, 1350, 775))
-            graphics.draw_rectangle(screen, (25, 149, 21), (1380, 10, 200, 775))
-            graphics.draw_rectangle(screen, (0, 0, 0), (1385, 15, 190, 765))
-            graphics.draw_rectangle(screen, (0, 0, 0), (15, 15, 1340, 765))
+            quit = False
+            
 
             for event in pygame.event.get():
 
@@ -74,10 +67,9 @@ def game():
                         if inventory_displayed:
                             inventory_text = the_player.display_inventory()
 
+            if quit == True:
+                exit()
             
-
-            graphics.status_bars(the_player.health, the_player.sanity, the_player.patience) # Status Bars
-
             #Gameover text
             if the_player.health <= 0 or the_player.sanity <= 0 or the_player.patience <= 0:
                 if the_player.health <= 0:
@@ -91,19 +83,22 @@ def game():
                     gameover = True
             
             if inventory_displayed:
-                graphics.show_text(inventory_text, 20, 20, 70, green)
+                inventoryscreen.display(inventory_text)
 
             if not inventory_displayed:
-                graphics.show_text(message, 20, 20, 45, green)
+                terminalscreen.display(message, the_player.health, the_player.sanity, the_player.patience)
+                if inventory_button.draw(screen):
+                    message += "\nButton Pressed"
+
+            
 
             pygame.display.update()  
             pygame.time.delay(60) 
 
         graphics.show_text(message, 20, 20, 45, green)
+        
 
-        if quit == True:
-            running = False
-        else:
+        if gameover == True:
             while gameover:
                 for event in pygame.event.get():
                     if event.type == pygame.QUIT:
