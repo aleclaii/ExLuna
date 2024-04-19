@@ -26,7 +26,13 @@ def game():
         event_pending = False
         gameover_base = "You have succumbed to your {}! Game Over!\nYour score: {}\nPress R to restart or Q to quit!"
         message = "Welcome to Zurvive! Press W to Explore!\nPress i for Inventory"
-        inventory_button = button.Button(green, 100, 100, 150, 50, font, 'Click Me!')
+
+        #Buttons
+        terminal_button = button.Button(black, 10, 10, 250, 75, font, green, 'Terminal')
+        inventory_button = button.Button(black, 285, 10, 250, 75, font, green, 'Inventory')
+        planet_button = button.Button(black, 560, 10, 250, 75, font, green, 'Planets')
+        ship_button = button.Button(black, 835, 10, 250, 75, font, green, 'Ship')
+        base_button = button.Button(black, 1110, 10, 250, 75, font, green, 'Base')
         
 
         while not gameover:
@@ -85,11 +91,45 @@ def game():
             if inventory_displayed:
                 inventoryscreen.display(inventory_text)
 
+                if inventory_button.draw(screen): #Inventory
+                    print("Button Pressed")
+
+                if planet_button.draw(screen): #Planet
+                    inventory_text = the_player.display_inventory()
+                    inventory_displayed = True
+
+                if terminal_button.draw(screen): #Terminal
+                    inventory_displayed = False
+
+                if base_button.draw(screen): #Base
+                    inventory_text = the_player.display_inventory()
+                    inventory_displayed = True
+                    
+                if ship_button.draw(screen): #Ship
+                    inventory_text = the_player.display_inventory()
+                    inventory_displayed = True
+
             if not inventory_displayed:
                 terminalscreen.display(message, the_player.health, the_player.sanity, the_player.patience)
-                if inventory_button.draw(screen):
-                    message += "\nButton Pressed"
 
+                if inventory_button.draw(screen): #Inventory
+                    inventory_text = the_player.display_inventory()
+                    inventory_displayed = True
+
+                if planet_button.draw(screen): #Planet
+                    inventory_text = the_player.display_inventory()
+                    inventory_displayed = True
+
+                if terminal_button.draw(screen): #Terminal
+                    print("Button Pressed")
+
+                if base_button.draw(screen): #Base
+                    inventory_text = the_player.display_inventory()
+                    inventory_displayed = True
+                    
+                if ship_button.draw(screen): #Ship
+                    inventory_text = the_player.display_inventory()
+                    inventory_displayed = True
             
 
             pygame.display.update()  
