@@ -10,3 +10,4 @@ def create_events():
         "rock": 25 
     }
     return events_dict
+

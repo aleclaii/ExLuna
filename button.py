@@ -1,9 +1,9 @@
 import pygame
 
 class Button:
-    def __init__(self, color, x, y, width, height, font, textcolor, text=''):
+    def __init__(self, color, x, y, width, height, font, text_color, text=''):
         self.color = color
-        self.textcolor = textcolor
+        self.text_color = text_color
         self.x = x
         self.y = y
         self.width = width
@@ -29,7 +29,7 @@ class Button:
         pygame.draw.rect(screen, self.color, self.rect)
 
         # Text drawing
-        text_surf = self.font.render(self.text, True, self.textcolor)
+        text_surf = self.font.render(self.text, True, self.text_color)
         text_rect = text_surf.get_rect(center=(self.x + self.width // 2, self.y + self.height // 2))
         screen.blit(text_surf, text_rect)
 

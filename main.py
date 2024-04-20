@@ -32,7 +32,7 @@ def game():
         inventory_button = button.Button(black, 285, 10, 250, 75, font, green, 'Inventory')
         planet_button = button.Button(black, 560, 10, 250, 75, font, green, 'Planets')
         ship_button = button.Button(black, 835, 10, 250, 75, font, green, 'Ship')
-        base_button = button.Button(black, 1110, 10, 250, 75, font, green, 'Base')
+        base_button = button.Button(black, 1110, 10, 250, 75, font, green,  'Base')
         
 
         while not gameover:
@@ -72,6 +72,7 @@ def game():
                         inventory_displayed = not inventory_displayed
                         if inventory_displayed:
                             inventory_text = the_player.display_inventory()
+                            inventoryscreen.display(inventory_text, the_player.health, the_player.sanity , the_player.patience)
 
             if quit == True:
                 exit()
@@ -89,7 +90,7 @@ def game():
                     gameover = True
             
             if inventory_displayed:
-                inventoryscreen.display(inventory_text)
+                inventoryscreen.display(inventory_text, the_player.health, the_player.sanity , the_player.patience)
 
                 if inventory_button.draw(screen): #Inventory
                     print("Button Pressed")
