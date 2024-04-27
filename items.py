@@ -1,4 +1,4 @@
-import pygame,random,sys, player, items, main
+import pygame,random,sys, player_files.player as player, player_files.items as items, main
 class Item: # Items and Desc
     items = {
         "Medkit" : " Saving Grace", # When health < 0, restore to 50 

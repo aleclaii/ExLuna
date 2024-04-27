@@ -1,4 +1,6 @@
-import pygame,random,sys, player, items, main, events, graphics
+import pygame, main
+
+from player_files import player
 
 def init_screen(width, height):
     pygame.init()

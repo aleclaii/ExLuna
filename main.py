@@ -2,13 +2,18 @@ import pygame
 pygame.init()
 pygame.display.set_caption("Zurvive")
 
-import player, events, graphics, button, terminalscreen, inventoryscreen
+import player_files.player as player, events, button, planets
+
+from graphical_files import inventoryscreen, terminalscreen, planetscreen, graphics, planetscreen
+
 
 screen = pygame.display.set_mode((1600, 800))
 font = pygame.font.Font("TurretRoad-Regular.ttf", 32)
 black = (0, 0, 0)
 white = (255, 255, 255)
 green = (25, 149, 21)
+planet = planets.PlanetManager()
+current_planet = planet.get_current_planet()
 
 
 def game():
@@ -18,12 +23,27 @@ def game():
     
 
     while running:
+
+        #Initialize Player and Game
         the_player = player.Player()  
         the_adventure = events.Adventure()  
+        
+
+        #Initialize Game loop
         gameover = False
+
+        #Initialize different menus
+        terminal_displayed = True
         inventory_displayed = False
+        planet_displayed = False
+        ship_displayed = False
+        base_displayed = False
+
+        #Event initialization
         event = None
         event_pending = False
+
+        #Starter Text
         gameover_base = "You have succumbed to your {}! Game Over!\nYour score: {}\nPress R to restart or Q to quit!"
         message = "Welcome to Zurvive! Press W to Explore!\nPress i for Inventory"
 
@@ -41,6 +61,7 @@ def game():
             quit = False
             
 
+            #Main Game Loop
             for event in pygame.event.get():
 
                 if event.type == pygame.QUIT:
@@ -72,7 +93,7 @@ def game():
                         inventory_displayed = not inventory_displayed
                         if inventory_displayed:
                             inventory_text = the_player.display_inventory()
-                            inventoryscreen.display(inventory_text, the_player.health, the_player.sanity , the_player.patience)
+                            inventoryscreen.display(inventory_text, the_player.health, the_player.sanity , the_player.patience, the_player)
 
             if quit == True:
                 exit()
@@ -89,49 +110,70 @@ def game():
                     message = gameover_base.format("boredom",the_player.score)
                     gameover = True
             
+
+            #Menu Buttons Check
             if inventory_displayed:
-                inventoryscreen.display(inventory_text, the_player.health, the_player.sanity , the_player.patience)
+                inventoryscreen.display(inventory_text, the_player.health, the_player.sanity , the_player.patience, the_player)
 
                 if inventory_button.draw(screen): #Inventory
                     print("Button Pressed")
 
                 if planet_button.draw(screen): #Planet
                     inventory_text = the_player.display_inventory()
-                    inventory_displayed = True
+                    planet_displayed = True
+                    inventory_displayed = False
 
                 if terminal_button.draw(screen): #Terminal
+                    terminal_displayed = True
                     inventory_displayed = False
 
                 if base_button.draw(screen): #Base
-                    inventory_text = the_player.display_inventory()
-                    inventory_displayed = True
+                    print("Button Pressed")
                     
                 if ship_button.draw(screen): #Ship
-                    inventory_text = the_player.display_inventory()
-                    inventory_displayed = True
+                    print("Button Pressed")
 
-            if not inventory_displayed:
+            if terminal_displayed:
                 terminalscreen.display(message, the_player.health, the_player.sanity, the_player.patience)
 
                 if inventory_button.draw(screen): #Inventory
                     inventory_text = the_player.display_inventory()
                     inventory_displayed = True
+                    terminal_displayed = False
 
-                if planet_button.draw(screen): #Planet
-                    inventory_text = the_player.display_inventory()
-                    inventory_displayed = True
+                if planet_button.draw(screen):
+                    planet_displayed = True
+                    terminal_displayed = False
 
                 if terminal_button.draw(screen): #Terminal
                     print("Button Pressed")
 
                 if base_button.draw(screen): #Base
-                    inventory_text = the_player.display_inventory()
-                    inventory_displayed = True
+                    print("Button Pressed")
                     
                 if ship_button.draw(screen): #Ship
+                    print("Button Pressed")
+            
+            if planet_displayed:
+                planetscreen.display(the_player.health, the_player.sanity, the_player.patience)
+
+                if inventory_button.draw(screen): #Inventory
                     inventory_text = the_player.display_inventory()
                     inventory_displayed = True
-            
+                    planet_displayed = False
+
+                if planet_button.draw(screen): #Planet
+                    print("Button Pressed")
+
+                if terminal_button.draw(screen): #Terminal
+                    terminal_displayed = True
+                    planet_displayed = False
+
+                if base_button.draw(screen): #Base
+                    print("Button Pressed")
+                    
+                if ship_button.draw(screen): #Ship
+                    print("Button Pressed")
 
             pygame.display.update()  
             pygame.time.delay(60) 

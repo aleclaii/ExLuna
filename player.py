@@ -1,4 +1,4 @@
-import pygame,random,sys, player, items
+import pygame,random,sys, player_files.player as player, player_files.items as items
 
 class Player: #Render Text on screen
     def __init__(self):
@@ -131,6 +131,8 @@ class Player: #Render Text on screen
             return True
     
     def remove_item(self, item): #Remove on use items
+        if item == "Empty":
+            pass
         for i, invitem in enumerate(self.items): 
             if invitem == item:
                 self.items[i] = "Empty"
