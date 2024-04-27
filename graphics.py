@@ -13,6 +13,8 @@ def update_display():
     pygame.display.update()
     
 def show_text(message, x, y, line_height, color): 
+    if message is None:
+        message = "No message available"
     lines = message.split('\n')  
     for line_number, line in enumerate(lines):
         text_image = main.font.render(line, True, color)

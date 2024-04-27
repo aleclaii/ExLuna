@@ -7,10 +7,6 @@ from player_files import player, items
 class Adventure:
 
 
-    def __init__(self):
-        self.planet = main.planet.get_current_planet
-
-
     def generate_event(self):
 
         #Generate Random Event
@@ -30,10 +26,9 @@ class Adventure:
             result = "positive"
             player.remove_item("Smoke Bomb")
 
-        match self.planet:
-
+        match main.planet.get_current_planet():
+            
             case "Primus":
-
                 match event_type:
 
                     case "zombie":
@@ -158,40 +153,159 @@ class Adventure:
                             player.get_hp(-10)
                             player.get_sp(-2)    
                             return "You tripped over a rock!\nOuch!"
-                
             case "Mystica":
 
                 match event_type:
 
-                    case "goblin": #Incomplete
+                    case "goblin":
                 
-                        #Zombie like case but harder
-                        pass
+                        loot = random.choice([True, False])
 
-                    case "stache": #Incomplete
+                        if result == "positive" and loot == False:
+                            player.get_score(50)
+                            return "A goblin tried to stab you but you knocked it out!"
+                        
+                        elif result == "positive" and loot == True:
+                            player.get_score(100)
+                            item_found = random.choice(list(items.Item.items.keys()))
 
-                        #Food like case but more rewarding
-                        pass
+                            message="You successfuly snuck up on a goblin!\nYou found a "+ item_found +" on it!"
+                            lootmessage = player.find_regular_item(item_found)
+                            return message + lootmessage
+                        
+                        elif result == "negative":
+                            player.get_hp(-25)
+                            player.get_sp(-2)  
+                            return "A goblin snuck up behind you and stabbed you in the leg!"
 
-                    case "ruins": #Incomplete
+                    case "stache":
 
-                        #building but harder
-                        pass
+                        if result == "positive":
+                            player.get_hp(25)
+                            player.get_score(10)
+                            player.get_sp(5)  
+                            return "You stumbled upon a hidden stache!\nYou found enough food for a week."
+                        
+                        if result == "negative":
+                            player.get_sp(-2)  
+                            return "You stumbled upon a hidden stache!\nHowever you couldn't break it open"
 
-                    case "ore": #Incomplete
+                    case "ruins":
 
-                        #rock but harder
-                        pass
+                        if result == "positive" or player.check_inventory("Map") == True:
 
-                    case "magician": #Incomplete
+                            if player.check_inventory("Map") == True:
+                                player.remove_item("Map")
 
-                        #unique case
-                        pass
+                            item_found = random.choice(list(items.Item.items.keys()))
 
-                    case "beast": #Incomplete
+                            lootmessage = player.find_regular_item(item_found)
+                            message="You found an abandoned wizard's tower!\nInside you stumbled upon a "+item_found+"!"
+                            player.get_score(25)
+                            player.get_sp(4)
+                            return message + lootmessage
 
-                        #animal but harder
-                        pass
+                        elif result == "negative":
+                            player.get_hp(-20)
+                            player.get_sp(-2)
+                            return "You found a wizard's tower but you got lost\nand the roof collapsed on you!"                      
+
+                    case "ore": 
+
+                        if result == "positive":
+                            choices = ["Dull Ore", "Lusterous Ore", "Pebble Golem"]
+                            weights = [20, 75, 5]
+                            rock_result = random.choices(choices, weights)[0]
+
+                            if rock_result == "Pebble Golem":
+                                message = "You found a Rock ... With a Face on it!?"
+                                lootmessage = player.find_rock(rock_result)
+                                player.get_score(5)
+                                player.get_sp(2)
+                                return message + lootmessage
+                            
+                            elif rock_result == "Lusterous Ore":
+                                message = "You found a Shiny Rock!\nIts luster calms you."
+                                lootmessage = player.find_rock(rock_result)
+                                player.get_score(2)
+                                player.get_sp(4)
+                                return message + lootmessage
+                            
+                            else:
+                                message = "You found a Dull Ore\nNothing noteworthy."
+                                lootmessage = player.find_rock(rock_result)
+                                player.get_score(1)
+                                return message + lootmessage
+                        
+                        if result == "negative":
+                            player.get_hp(-10)
+                            player.get_sp(-2)    
+                            return "You tripped over a rock!\nOuch!"
+
+                    case "magician": 
+                        if result == "positive":
+                            result = random.choice(["positive", "negative"])
+
+                            if result == "positive":
+                                result = random.choice(["positive", "negative"])
+
+                                if result == "positive":
+
+                                    item_found_1 = random.choice(list(items.Item.items.keys()))
+                                    item_found_2 = random.choice(list(items.Item.items.keys()))
+                                    lootmessage = player.find_regular_item(item_found_1) 
+                                    lootmessage += player.find_regular_item(item_found_2) 
+                                    message="A magician spotted you and offered you a "+item_found_1+" and a" +item_found_2 + "!"
+                                    player.get_score(50)
+                                    player.get_sp(5)
+                                    return message + lootmessage
+                                
+                                else:
+                                    item_found = random.choice(list(items.Item.items.keys()))
+                                    lootmessage = player.find_regular_item(item_found)
+                                    message="A magician spotted you and offered you a "+item_found+"!"
+                                    player.get_score(25)
+                                    player.get_sp(4)
+                                    return message + lootmessage
+                            else:
+                                player.get_score(1)
+                                return "A magician spotted you and ignored you"
+                        else:
+                            player.get_hp(-25)
+                            player.get_sp(-2)  
+                            return "A magician spotted you and shot you on sight!"
+
+                    case "beast": 
+
+                        event_animal = str(random.choice(["Unicorn", "Direwolf", "Pixie", "Faerie"]))
+
+                        if result == "positive":
+
+                            if "Treat" in player.items:
+
+                                player.remove_item("Treat")
+                                item_found = random.choice(list(items.Item.items.keys()))
+
+                                if item_found == "Pet Rock":
+                                    while item_found == "Pet Rock":
+                                        item_found = random.choice(list(items.Item.items.keys()))
+
+                                lootmessage = player.find_regular_item(item_found)
+                                message="You encountered a friendly "+event_animal+"!\nIt gave you a "+item_found+"!"
+                                player.get_score(10)
+                                player.get_sp(1)
+
+
+                                return message + lootmessage
+                            
+                            else:
+                                player.get_score(5)
+                                player.get_sp(1)
+                                return "You encountered a friendly " + event_animal + "!\nIt's presence calms you"
+                            
+                        if result == "negative":
+                            player.get_sp(-1)
+                            return "You encountered an unfriendly " + event_animal + "!\nIt won't stop annoying you"
 
             case "Pygmalia II":
 

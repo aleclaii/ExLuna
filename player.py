@@ -1,20 +1,25 @@
-import pygame,random,sys, player_files.player as player, player_files.items as items
+import random
+
+from player_files import player, items
 
 class Player: #Render Text on screen
     def __init__(self):
-        self.health = 100
-        self.sanity = 10  
-        self.patience = 3
+        self.health = 250
+        self.sanity = 25  
+        self.patience = 4
         self.score = 0  
         self.items = ["Empty"] * 10
         self.rabbit = False
         self.has_rock = False
+        self.has_golem = False
         self.armor = 0  
 
     def get_hp(self, points): # HP changes
         if points % 2 != 0:
             points -= 1
         if points < 0:
+            if self.has_golem == True:
+                points += 10
             points -= self.armor # Armor effects
         if points < 0 and self.rabbit == True: # Foot effect
             luck = random.choice([True, False])
@@ -30,8 +35,8 @@ class Player: #Render Text on screen
                 pass
         self.health += points  
 
-        if self.health > 100:  
-            self.health = 100
+        if self.health > 250:  
+            self.health = 250
         elif self.health <= 0 and "Medkit" in self.items: # Medkit use
             self.health = 50  
             self.remove_item("Medkit")
@@ -41,8 +46,10 @@ class Player: #Render Text on screen
     def get_sp(self, points): #SP changes
         if points % 2 != 0:
             points -= 1
+
         if points < 0 and self.has_rock == True: # Rock effect
             points += 1
+
         if points < 0 and self.rabbit == True: # Foot effect
             luck = random.choice([True, False])
             if luck == True:
@@ -57,8 +64,8 @@ class Player: #Render Text on screen
                 pass
         self.sanity += points
 
-        if self.sanity > 10:  
-            self.sanity = 10
+        if self.sanity > 25:  
+            self.sanity = 25
         elif self.sanity < 0:  
             self.sanity = 0
 
@@ -67,21 +74,25 @@ class Player: #Render Text on screen
 
     def find_rock(self, item):
 
-        if item != "Pet Rock":
+        if item != "Pet Rock" and item != "Pebble Golem":
             return "\nYou place the stone where you found it.\nIt was too basic."
 
         elif "Empty" not in self.items:
             return "\nYou couldn't fit it in your pocket!\nYou left it where you found it"
         
-        elif self.has_rock: 
-            return "\nIn an act of loyalty to your companion.\nYou drop the rock."
-        
-        else:
+        elif item == "Pet Rock":
             for i, slot in enumerate(self.items):
                 if slot == "Empty":  
                     self.items[i] = item 
                     self.has_rock = True
                     return "\nYou house your new Pet Rock in your right pocket!"
+                
+        elif item == "Pebble Golem":
+            for i, slot in enumerate(self.items):
+                if slot == "Empty":  
+                    self.items[i] = item 
+                    self.has_golem = True
+                    return "\nThe small golem starts following you!"
         
     def find_regular_item(self,item):
 

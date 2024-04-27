@@ -77,39 +77,39 @@ def display(inventory_text, hp, sp, ps, player):
         main.inventory_text = player.display_inventory()
 
     if discard_button_1.draw(main.screen):
-        player.remove_item(player.items[0])
+        player.remove_item(player.items[1])
         main.inventory_text = player.display_inventory()
 
     if discard_button_2.draw(main.screen):
-        player.remove_item(player.items[0])
+        player.remove_item(player.items[2])
         main.inventory_text = player.display_inventory()    
 
     if discard_button_3.draw(main.screen):
-        player.remove_item(player.items[0])
+        player.remove_item(player.items[3])
         main.inventory_text = player.display_inventory()
 
     if discard_button_4.draw(main.screen):
-        player.remove_item(player.items[0])
+        player.remove_item(player.items[4])
         main.inventory_text = player.display_inventory()
 
     if discard_button_5.draw(main.screen):
-        player.remove_item(player.items[0])
+        player.remove_item(player.items[5])
         main.inventory_text = player.display_inventory()
         
     if discard_button_6.draw(main.screen):
-        player.remove_item(player.items[0])
+        player.remove_item(player.items[6])
         main.inventory_text = player.display_inventory()
 
     if discard_button_7.draw(main.screen):
-        player.remove_item(player.items[0])
+        player.remove_item(player.items[7])
         main.inventory_text = player.display_inventory()
 
     if discard_button_8.draw(main.screen):
-        player.remove_item(player.items[0])
+        player.remove_item(player.items[8])
         main.inventory_text = player.display_inventory()
 
     if discard_button_9.draw(main.screen):
-        player.remove_item(player.items[0])
+        player.remove_item(player.items[9])
         main.inventory_text = player.display_inventory()
 
     #Current Planet

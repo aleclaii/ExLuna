@@ -39,6 +39,9 @@ def game():
         ship_displayed = False
         base_displayed = False
 
+        #Planet initialization
+        
+
         #Event initialization
         event = None
         event_pending = False
@@ -80,7 +83,7 @@ def game():
                         message = the_adventure.apply_event(the_player, event_type)
                         event_pending = False
                         event_type = None
-                        if the_player.patience < 3: 
+                        if the_player.patience < 4: 
                             the_player.patience += 1
 
                     elif event.key == pygame.K_n and event_pending: #Reject Event
